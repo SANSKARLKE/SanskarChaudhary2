@@ -2,6 +2,23 @@ import React, { useState } from "react";
 import PropTypes, { string } from "prop-types";
 import "./TextForm.css";
 export default function TextForm(props) {
+  let lbColour = "";
+  if (props.bColour === "Blue") {
+    lbColour = "primary";
+  } else if (props.bColour === "Green") {
+    lbColour = "success";
+  } else if (props.bColour === "Red") {
+    lbColour = "danger";
+  } else if (props.bColour === "Yellow") {
+    lbColour = "warning";
+  } else {
+    lbColour = "info";
+  }
+  let lmode = props.mode;
+  let myStyle = {
+    color: lmode === "light" ? "#33363A" : "white",
+    backgroundColor: lmode === "light" ? "white" : props.colour,
+  };
   const [text, setText] = useState("");
   const [saveText, setSaveText] = useState("");
   const WordCount = () => {
@@ -49,16 +66,50 @@ export default function TextForm(props) {
     return c;
   };
   const handleSaveText = () => {
-    setSaveText(text);
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else {
+      setSaveText(text);
+      props.alert("Text Saved", "success");
+    }
   };
   const handleLoadText = () => {
-    setText(saveText);
+    if (saveText === "") {
+      props.alert("No text saved yet", "warning");
+    } else {
+      setText(saveText);
+      props.alert("Saved text Loaded", "success");
+    }
+  };
+  const handleCopyText = () => {
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else {
+      navigator.clipboard.writeText(text);
+      props.alert("Text copied to clipboard", "success");
+    }
   };
   const handleUpperCase = () => {
-    setText(text.toUpperCase());
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else if (text.toUpperCase() === text) {
+      props.alert("No changes needed", "info");
+    } else {
+      setText(text.toUpperCase());
+      props.alert("Converted to Upper Case", "success");
+      props.handleCMade(1);
+    }
   };
   const handleLowerCase = () => {
-    setText(text.toLowerCase());
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else if (text.toLowerCase() === text) {
+      props.alert("No changes needed", "info");
+    } else {
+      setText(text.toLowerCase());
+      props.alert("Converted to Lower Case", "success");
+      props.handleCMade(1);
+    }
   };
   const handleRemoveNumber = () => {
     let newText = "";
@@ -67,7 +118,15 @@ export default function TextForm(props) {
         newText += text[i];
       }
     }
-    setText(newText);
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else if (newText === text) {
+      props.alert("No changes needed", "info");
+    } else {
+      setText(newText);
+      props.alert("Numbers removed", "success");
+      props.handleCMade(1);
+    }
   };
   const handleTitleCase = () => {
     let newText = "";
@@ -82,7 +141,15 @@ export default function TextForm(props) {
         }
       }
     }
-    setText(newText);
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else if (newText === text) {
+      props.alert("No changes needed", "info");
+    } else {
+      setText(newText);
+      props.alert("Converted to Title Case", "success");
+      props.handleCMade(1);
+    }
   };
   const handleRemoveSpace = () => {
     let newText = "";
@@ -109,10 +176,24 @@ export default function TextForm(props) {
         }
       }
     }
-    setText(newText);
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else if (newText === text) {
+      props.alert("No changes needed", "info");
+    } else {
+      setText(newText);
+      props.alert("Extra spaces removed", "success");
+      props.handleCMade(1);
+    }
   };
   const handleClear = () => {
-    setText("");
+    if (text === "") {
+      props.alert("Text field is already empty", "warning");
+    } else {
+      setText("");
+      props.alert("Text cleared", "success");
+    }
+    props.handleCMade(0);
   };
   const handleRemoveSpecial = () => {
     let newText = "";
@@ -126,8 +207,15 @@ export default function TextForm(props) {
         newText += text[i];
       }
     }
-    handleRemoveSpace();
-    setText(newText);
+    if (text === "") {
+      props.alert("No text detected", "warning");
+    } else if (newText === text) {
+      props.alert("No changes needed", "info");
+    } else {
+      setText(newText);
+      props.alert("Special characters removed", "success");
+      props.handleCMade(1);
+    }
   };
   const handleChange = (event) => {
     setText(event.target.value);
@@ -152,7 +240,13 @@ export default function TextForm(props) {
         </div>
         <div>
           <button
-            className="btn btn-outline-danger btn-sm"
+            className={`btn btn-outline-${
+              lbColour === "danger"
+                ? props.mode === "light"
+                  ? "dark"
+                  : "light"
+                : "danger"
+            } btn-sm`}
             onClick={handleClear}
           >
             Clear
@@ -167,38 +261,62 @@ export default function TextForm(props) {
         placeholder="Enter text here"
         value={text}
         onChange={handleChange}
+        style={myStyle}
       ></textarea>
       <div className="flexi space-giver">
         <div className="space-side">
-          <button className="btn btn-outline-primary" onClick={handleSaveText}>
+          <button
+            className={`btn btn-outline-${lbColour}`}
+            onClick={handleSaveText}
+          >
             Save current text
           </button>
         </div>
         <div className="space-side">
-          <button className="btn btn-outline-primary" onClick={handleLoadText}>
+          <button
+            className={`btn btn-outline-${lbColour}`}
+            onClick={handleLoadText}
+          >
             Load saved text
+          </button>
+        </div>
+        <div className="space-side">
+          <button
+            className={`btn btn-outline-${lbColour}`}
+            onClick={handleCopyText}
+          >
+            Copy Text
           </button>
         </div>
       </div>
       <div className="flexi">
         <div className="space-side">
-          <button className="btn btn-outline-primary" onClick={handleUpperCase}>
+          <button
+            className={`btn btn-outline-${lbColour}`}
+            onClick={handleUpperCase}
+          >
             Convert to Uppercase
           </button>
         </div>
         <div className="space-side">
-          <button className="btn btn-outline-primary" onClick={handleLowerCase}>
+          <button
+            className={`btn btn-outline-${lbColour}`}
+            onClick={handleLowerCase}
+          >
             Convert to Lowercase
           </button>
         </div>
         <div className="space-side">
-          <button className="btn btn-outline-primary" onClick={handleTitleCase}>
+          <button
+            className={`btn btn-outline-${lbColour}`}
+            onClick={handleTitleCase}
+          >
             Convert to Titlecase
           </button>
         </div>
         <div className="space-side">
           <button
-            className="btn btn-outline-primary"
+            className={`btn btn-outline-${lbColour}`}
             onClick={handleRemoveSpace}
           >
             Remove extra spaces
@@ -206,7 +324,7 @@ export default function TextForm(props) {
         </div>
         <div className="space-side">
           <button
-            className="btn btn-outline-primary"
+            className={`btn btn-outline-${lbColour}`}
             onClick={handleRemoveNumber}
           >
             Remove numbers
@@ -214,7 +332,7 @@ export default function TextForm(props) {
         </div>
         <div className="space-side">
           <button
-            className="btn btn-outline-primary"
+            className={`btn btn-outline-${lbColour}`}
             onClick={handleRemoveSpecial}
           >
             Remove special characters

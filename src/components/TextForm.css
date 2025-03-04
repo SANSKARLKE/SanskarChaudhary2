@@ -2,6 +2,12 @@
   padding-top: 15px;
   padding-bottom: 15px;
 }
+.space-giver-bottom {
+  padding-bottom: 15px;
+}
+.space-giver-bottom-db {
+  padding-bottom: 30px;
+}
 .space-giver-db {
   padding-top: 30px;
   padding-bottom: 30px;
