@@ -16,7 +16,7 @@ export default function TextForm(props) {
   }
   let lmode = props.mode;
   let myStyle = {
-    color: lmode === "light" ? "#33363A" : "white",
+    color: lmode === "light" ? props.colour : "white",
     backgroundColor: lmode === "light" ? "white" : props.colour,
   };
   const [text, setText] = useState("");
@@ -261,7 +261,7 @@ export default function TextForm(props) {
         placeholder="Enter text here"
         value={text}
         onChange={handleChange}
-        style={myStyle}
+        style={{ color: "black" }}
       ></textarea>
       <div className="flexi space-giver">
         <div className="space-side">
