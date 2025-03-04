@@ -45,7 +45,7 @@ function App() {
     cMade === 0 ? "Sanskar Chaudhary" : "Sanskar " + cMade + " changes";
   return (
     <>
-      <Router basename="/SanskarChaudhary">
+      <Router basename="/SanskarChaudhary2">
         <NavBar
           title="Sanskar Chaudhary"
           home="Home"
