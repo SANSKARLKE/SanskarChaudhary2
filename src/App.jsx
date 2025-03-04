@@ -60,7 +60,7 @@ function App() {
         <Routes>
           <Route
             exact
-            path="/SanskarChaudhary"
+            path="/"
             element={
               <Home
                 mode={mode}
