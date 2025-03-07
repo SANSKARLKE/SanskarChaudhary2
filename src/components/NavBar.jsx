@@ -46,6 +46,7 @@ function NavBar(props) {
               role="switch"
               id="flexSwitchCheckDefault"
               onClick={props.clicker}
+              style={{ cursor: "pointer" }}
             />
             <label
               className={`form-check-label text-${
