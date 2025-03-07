@@ -56,3 +56,6 @@
 .flexi-sc {
   display: flex;
 }
+.accordion-button::after {
+  filter: invert(1);
+}
